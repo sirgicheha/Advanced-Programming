@@ -1,45 +1,72 @@
 package Lecture4_interfaces_abstract_classes;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Calendar;
-
-public class WithdrawalTransaction extends BaseTransaction {
-    public WithdrawalTransaction(int amount, @NotNull Calendar date) {
-        super(amount, date);
+/**
+ * Represents a withdrawal transaction in the banking system.
+ */
+public class WithdrawalTransaction extends concreteBaseTransaction {
+    /**
+     * Constructs a Withdrawal transaction  with the specified amount.
+     *
+     * @param amount the amount to withdraw
+     */
+    public WithdrawalTransaction(int amount) {
+        super(amount);
     }
 
-    private boolean checkDepositAmount(int amt) {
-        if (amt < 0) {
-            return false;
-        } else {
-            return true;
+    /**
+     * Checks if the withdrawal amount is valid and if there are sufficient funds.
+     *
+     * @param account the bank account to check
+     * @throws InsufficientFundsException if there are insufficient funds for the withdrawal
+     * @throws IllegalArgumentException if the withdrawal amount is less than or equal to zero
+     */
+    public void checkWithdrawalAmount(BankAccount account) throws InsufficientFundsException {
+        if (getAmount() <= 0) {
+            throw new IllegalArgumentException("Withdrawal amount must be greater than zero.");
+        }
+        if (getAmount() > account.getBalance()) {
+            throw new InsufficientFundsException("Insufficient funds for withdrawal. Available balance: " + account.getBalance());
         }
     }
 
-    // Method to reverse the transaction
-    public boolean reverse() {
-        return true;
-    } // return true if reversal was successful
-
-    // Method to print a transaction receipt or details
-    public void printTransactionDetails() {
-        System.out.println("Deposit Trasaction: " + this.toString());
-    }
-
-    /*
-    Oportunity for assignment: implementing different form of withdrawal
+    /**
+     * Applies the withdrawal transaction to the specified bank account.
+     *
+     * @param account the bank account to apply the withdrawal to
      */
-    public void apply(BankAccount ba) {
-        double curr_balance = ba.getBalance();
-        if (curr_balance > getAmount()) {
-            double new_balance = curr_balance - getAmount();
-            ba.setBalance(new_balance);
+    @Override
+    public void apply(BankAccount account) {
+        try {
+            checkWithdrawalAmount(account);
+            account.setBalance(account.getBalance() - getAmount());
+            printTransactionDetails();
+            System.out.println("New Balance: " + account.getBalance());
+        } catch (InsufficientFundsException e) {
+            System.out.println("Withdrawal failed: " + e.getMessage());
+
+            // If the withdrawal amount is greater than the balance, withdraw all available funds
+            double availableBalance = account.getBalance();
+            account.setBalance(0);
+            double amountNotAvailable = getAmount() - availableBalance;
+
+            printTransactionDetails();
+            System.out.println("Withdrew all available funds: " + availableBalance);
+            System.out.println("Amount not available for withdrawal: " + amountNotAvailable);
+            System.out.println("New Balance: " + account.getBalance());
+        } catch (IllegalArgumentException e) {
+            System.out.println("Withdrawal failed: " + e.getMessage());
         }
     }
 
-    /*
-    Assignment 1 Q3: Write the Reverse method - a method unique to the WithdrawalTransaction Class
+    /**
+     * Reverses the withdrawal transaction, restoring the withdrawn amount to the bank account.
+     *
+     * @param account the bank account to reverse the withdrawal on
      */
+    public void reverse(BankAccount account) {
+        account.setBalance(account.getBalance() + getAmount());
+        System.out.println("Withdrawal reversed. New Balance: " + account.getBalance());
+    }
 }
+// Reverse doesn't really work when the amount requested for withdrawal is more than the balance
 

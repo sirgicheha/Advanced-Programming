@@ -2,26 +2,27 @@ package Lecture4_interfaces_abstract_classes;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public abstract class BaseTransaction implements TransactionInterface {
     private final int amount;
-    private final Calendar date;
+    private final String date;
     private final String transactionID;
 
     /**
      * Lecture1_adt.TransactionInterface Constructor
-     * @param amount in an integer
-     * @param date: Not null, and must be a Calendar object
+     * @param amount is an integer
+     * @param date: Not null, and must be a date object
      * @return void
      * Instialises the field, attributes of a transaction
      * Creates a object of this
      */
     public BaseTransaction(int amount, @NotNull Calendar date)  {
         this.amount = amount;
-        this.date = (Calendar) date.clone();
-        int uniq = (int) Math.random()*10000;
-        transactionID = date.toString()+uniq;
+        this.date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        transactionID = generateTransactionID();
     }
 
     /**
@@ -36,15 +37,22 @@ public abstract class BaseTransaction implements TransactionInterface {
      * getDate()
      * @return Calendar Object
      */
-    public Calendar getDate() {
+    public String getDate() {
 //        return date;    // Because we are dealing with Reference types we need to judiciously copy what our getters return
-        return (Calendar) date.clone(); // Defensive copying or Judicious Copying
+        return date; // Defensive copying or Judicious Copying
     }
 
     // Method to get a unique identifier for the transaction
-    public String getTransactionID(){
+    public String getTransactionID()
+    {
         return  transactionID;
     }
+
+    protected String generateTransactionID()
+    {
+        return "TXN" + System.currentTimeMillis();
+    }
+
     // Method to print a transaction receipt or details
     public abstract void printTransactionDetails();
     public abstract void apply(BankAccount ba);
