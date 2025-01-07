@@ -5,20 +5,24 @@ package Lecture4_interfaces_abstract_classes;
  */
 public class WithdrawalTransaction extends concreteBaseTransaction {
     /**
-     * Constructs a Withdrawal transaction  with the specified amount.
-     *
-     * @param amount the amount to withdraw
+     * Lecture4_interfaces_abstract_classes.WithdrawalTransaction Constructor
+     * @param amount: the amount to withdraw (must be a positive integer)
+     * @return void
+     * Initializes the `WithdrawalTransaction` object by calling the `concreteBaseTransaction` constructor
+     * The `amount` parameter is passed to the superclass to initialize common transaction attributes
      */
     public WithdrawalTransaction(int amount) {
         super(amount);
     }
 
     /**
-     * Checks if the withdrawal amount is valid and if there are sufficient funds.
-     *
-     * @param account the bank account to check
-     * @throws InsufficientFundsException if there are insufficient funds for the withdrawal
+     * checkWithdrawalAmount(BankAccount account) Method
+     * @param account: the bank account to check for sufficient funds
+     * @return void
+     * Validates the withdrawal amount and checks if the account has sufficient funds
      * @throws IllegalArgumentException if the withdrawal amount is less than or equal to zero
+     * @throws InsufficientFundsException if the withdrawal amount exceeds the available account balance
+     * Ensures that the withdrawal is valid and that there are sufficient funds in the account
      */
     public void checkWithdrawalAmount(BankAccount account) throws InsufficientFundsException {
         if (getAmount() <= 0) {
@@ -30,9 +34,19 @@ public class WithdrawalTransaction extends concreteBaseTransaction {
     }
 
     /**
-     * Applies the withdrawal transaction to the specified bank account.
-     *
-     * @param account the bank account to apply the withdrawal to
+     * apply(BankAccount account) Method
+     * @param account: the bank account to apply the withdrawal to
+     * @return void
+     * Applies the withdrawal transaction to the specified bank account
+     * Steps:
+     * 1. Calls `checkWithdrawalAmount()` to validate the withdrawal
+     * 2. Deducts the withdrawal amount from the account balance
+     * 3. Prints transaction details, including transaction ID, amount, and date
+     * 4. Prints the new balance of the bank account
+     * If the withdrawal amount exceeds the available balance:
+     * - Withdraws all available funds
+     * - Prints the amount not available for withdrawal
+     * - Sets the account balance to zero
      */
     @Override
     public void apply(BankAccount account) {
@@ -59,9 +73,12 @@ public class WithdrawalTransaction extends concreteBaseTransaction {
     }
 
     /**
-     * Reverses the withdrawal transaction, restoring the withdrawn amount to the bank account.
-     *
-     * @param account the bank account to reverse the withdrawal on
+     * reverse(BankAccount account) Method
+     * @param account: the bank account to reverse the withdrawal on
+     * @return void
+     * Reverses the withdrawal by restoring the withdrawn amount to the bank account balance
+     * Prints a confirmation message with the updated balance
+     * Note: The reverse operation may not fully restore funds if the withdrawal amount exceeds the original account balance
      */
     public void reverse(BankAccount account) {
         account.setBalance(account.getBalance() + getAmount());
