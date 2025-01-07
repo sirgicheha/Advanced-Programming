@@ -12,8 +12,12 @@ class concreteBaseTransaction implements TransactionInterface {
     private final String transactionID;
 
     /**
-     * @param amount is an integer
-     * @param date
+     * Lecture4_interfaces_abstract_classes.concreteBaseTransaction Constructor
+     * @param amount: an integer representing the amount involved in the transaction
+     * @return void
+     * Initializes the fields `amount`, `date`, and `transactionID`
+     * The `date` is automatically set to the current date and time in "yyyy-MM-dd HH:mm:ss" format
+     * The `transactionID` is generated using the `generateTransactionID` method
      */
     public concreteBaseTransaction(int amount)  {
         this.amount = amount;
@@ -22,8 +26,10 @@ class concreteBaseTransaction implements TransactionInterface {
     }
 
     /**
-     * getAmount()
+     * getAmount() Method
      * @return integer
+     * Returns the transaction amount
+     * Ensures immutability by returning the original amount
      */
     @Override
     public double getAmount() {
@@ -31,8 +37,10 @@ class concreteBaseTransaction implements TransactionInterface {
     }
 
     /**
-     * getDate()
-     * @return date Object
+     * getDate() Method
+     * @return String
+     * Returns the transaction date as a formatted string
+     * The format used is "yyyy-MM-dd HH:mm:ss"
      */
     @Override
     public String getDate()
@@ -41,8 +49,10 @@ class concreteBaseTransaction implements TransactionInterface {
     }
 
     /**
-     * getTransactionID()
-     * @return transactionID
+     * getTransactionID() Method
+     * @return String
+     * Returns the unique transaction ID for this transaction
+     * The ID is generated automatically upon instantiation using the `generateTransactionID` method
      */
     @Override
     public String getTransactionID()
@@ -51,8 +61,10 @@ class concreteBaseTransaction implements TransactionInterface {
     }
 
     /**
-     * generateTransactionID
-     * @return a unique transaction ID
+     * generateTransactionID() Method
+     * @return String
+     * Generates a unique transaction ID by appending the current system time in milliseconds to the prefix "TXN"
+     * Ensures that each transaction has a distinct identifier
      */
     protected String generateTransactionID()
     {
@@ -60,7 +72,12 @@ class concreteBaseTransaction implements TransactionInterface {
     }
 
     /**
-     * Prints transaction details: transactionID, amount of transaction and date
+     * printTransactionDetails() Method
+     * @return void
+     * Prints the details of the transaction, including:
+     * - Transaction ID
+     * - Amount
+     * - Date
      */
     public void printTransactionDetails()
     {
@@ -70,8 +87,12 @@ class concreteBaseTransaction implements TransactionInterface {
     };
 
     /**
-     * Applies the transaction to the passed bank account
-     * @param ba: the bank account to apply the transaction to
+     * apply(BankAccount ba) Method
+     * @param ba: a BankAccount object to which the transaction is applied
+     * @return void
+     * This method applies the transaction to the specified bank account
+     * The implementation is left for subclasses to define specific behavior
+     * Prints a confirmation message indicating the transaction was successful
      */
     public void apply(BankAccount ba)
     {
